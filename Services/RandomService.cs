@@ -6,23 +6,46 @@ namespace ProvaPub.Services
 {
 	public class RandomService
 	{
-		int seed;
+        private  readonly Random _rnd;
+        int seed;
         TestDbContext _ctx;
-		public RandomService()
+        int maxItem = 100;
+        int minItem = 1;
+		public RandomService(Random rnd, TestDbContext ctx)
         {
-            var contextOptions = new DbContextOptionsBuilder<TestDbContext>()
-    .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Teste;Trusted_Connection=True;")
-    .Options;
-            seed = Guid.NewGuid().GetHashCode();
+            
 
-            _ctx = new TestDbContext(contextOptions);
+            
+            var bytes = Guid.NewGuid().ToByteArray();
+            seed = BitConverter.ToInt32(bytes, 0);
+            _rnd = rnd;
+            _ctx = ctx;
         }
-        public async Task<int> GetRandom()
+        public async Task<string> GetRandom()
 		{
-            var number =  new Random(seed).Next(100);
-            _ctx.Numbers.Add(new RandomNumber() { Number = number });
-            _ctx.SaveChanges();
-			return number;
+
+            //var number =  new Random(seed).Next(100);
+            var number = _rnd.Next(1, maxItem + 1);
+            var nuber =await _ctx.Numbers.AsNoTracking().FirstOrDefaultAsync(p => p.Number == number);
+            var countItem = await _ctx.Numbers.AsNoTracking().CountAsync();
+
+            if (countItem == maxItem)
+            {
+                return $"Todos os numeros de {minItem} a {maxItem} já foram cadastrados";
+            }
+
+            if (nuber == null)
+            {
+                
+                _ctx.Numbers.Add(new RandomNumber() { Number = number });
+                _ctx.SaveChanges();
+            }
+            else
+            {
+                return $"valor já existe cadastrado na base de dados {number}";
+            }
+
+            return number.ToString();
 		}
 
 	}
