@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using ProvaPub.Repository;
 using ProvaPub.Repository.Interfaces;
 using ProvaPub.Services;
+using ProvaPub.Services.Factories;
+using ProvaPub.Services.Factories.Interfaces;
+using ProvaPub.Services.Interfaces;
+using ProvaPub.Services.Payments;
 using ProvaPub.Shared.Repository.Base;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +19,22 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddDbContext<TestDbContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("ctx")));
+	options.UseSqlServer(builder.Configuration.GetConnectionString("ctx")), ServiceLifetime.Scoped);
 builder.Services.AddScoped<Random>();
-builder.Services.AddScoped<TestDbContext>();
+//builder.Services.AddScoped<TestDbContext>();
 builder.Services.AddScoped<RandomService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CustomerService>();
+
+//services  pagaments
+builder.Services.AddScoped<IPaymentService,CreditCard>();
+builder.Services.AddScoped<IPaymentService, Pix>();
+builder.Services.AddScoped<IPaymentService, PayPal>();
+
+
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentServiceFactory, PaymentServiceFactory>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 var app = builder.Build();

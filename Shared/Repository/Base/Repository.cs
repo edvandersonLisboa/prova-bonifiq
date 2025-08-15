@@ -29,5 +29,19 @@ namespace ProvaPub.Shared.Repository.Base
             return (result,countTotal,hasNext);
         }
 
+        public async Task<TEntity> Insert(TEntity value)
+        {
+            try
+            {
+                var entry = await _dbSet.AddAsync(value);
+                await _context.SaveChangesAsync(); // Aqui o banco gera o ID
+                return entry.Entity;
+            }
+            catch( Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
+        }
     }
 }
