@@ -1,6 +1,9 @@
-﻿namespace ProvaPub.Shared.Repository.Base
+﻿using ProvaPub.Shared.Entities;
+
+namespace ProvaPub.Shared.Repository.Base
 {
-    public interface IRepository <TEntity>
+    public interface IRepository <TEntity> where TEntity : Entity
     {
+        Task<(ICollection<TEntity>, int, bool)> GetAllPagedAsync(int page, int pageSize);
     }
 }

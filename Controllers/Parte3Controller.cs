@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProvaPub.Models;
+using ProvaPub.Models.Entities;
 using ProvaPub.Repository;
 using ProvaPub.Services;
 

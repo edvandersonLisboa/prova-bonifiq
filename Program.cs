@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ProvaPub.Repository;
+using ProvaPub.Repository.Interfaces;
 using ProvaPub.Services;
+using ProvaPub.Shared.Repository.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddScoped<TestDbContext>();
 builder.Services.AddScoped<RandomService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 var app = builder.Build();
 
 

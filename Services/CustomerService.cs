@@ -1,21 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProvaPub.Models;
 using ProvaPub.Repository;
+using ProvaPub.Repository.Interfaces;
+using System.Threading.Tasks;
 
 namespace ProvaPub.Services
 {
     public class CustomerService
     {
         TestDbContext _ctx;
-
-        public CustomerService(TestDbContext ctx)
+        private readonly ICustomerRepository _customerRepository;
+        public CustomerService(TestDbContext ctx, ICustomerRepository customerRepository)
         {
-            _ctx = ctx;
+            _customerRepository = customerRepository;
         }
 
-        public CustomerList ListCustomers(int page)
+        public CustomerService()
         {
-            return new CustomerList() { HasNext = false, TotalCount = 10, Customers = _ctx.Customers.Skip(page).Take(10).ToList() };
+            
+        }
+        public async Task<CustomerList> ListCustomers(int page, int pageSize)
+        {
+
+            (var customers, var total, var hasNext) = await _customerRepository.GetAllPagedAsync(page, pageSize);
+            return new CustomerList() { HasNext = hasNext, TotalCount = total, Customers = customers.ToList() };
         }
 
         public async Task<bool> CanPurchase(int customerId, decimal purchaseValue)

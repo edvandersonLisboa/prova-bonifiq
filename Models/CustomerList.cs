@@ -1,4 +1,6 @@
-﻿namespace ProvaPub.Models
+﻿using ProvaPub.Models.Entities;
+
+namespace ProvaPub.Models
 {
 	public class CustomerList
 	{

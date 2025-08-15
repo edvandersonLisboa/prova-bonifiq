@@ -1,4 +1,4 @@
-﻿using ProvaPub.Models;
+﻿using ProvaPub.Models.Entities;
 using ProvaPub.Repository;
 
 namespace ProvaPub.Services

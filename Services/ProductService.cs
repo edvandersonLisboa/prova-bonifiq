@@ -2,33 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using ProvaPub.Models;
 using ProvaPub.Repository;
+using ProvaPub.Repository.Interfaces;
 
 namespace ProvaPub.Services
 {
 	public class ProductService
 	{
 		TestDbContext _ctx;
+		private readonly IProductRepository _productRepository;
 
-		public ProductService(TestDbContext ctx)
+		public ProductService(IProductRepository produtoRepository)
 		{
-			_ctx = ctx;
+			_productRepository = produtoRepository;
 		}
-
-		public async Task<ProductList>  ListProducts(int page)
+		
+		public async Task<ProductList>  ListProducts(int page, int pageSize)
 		{
-			var take = 2;
-			var products =_ctx.Products;
-			var countTotal =products.Count();
-            
-            var result = await _ctx.Products
-				.Skip(page * take)
-				.Take(take).ToListAsync();
+			
 
-            bool hasNext = page * take < countTotal;
+			(var products, var total, var hasNext) = await _productRepository.GetAllPagedAsync(page, pageSize);
             return new ProductList()
             {
-                Products = result.ToList(),
-                TotalCount = countTotal,
+                Products = products.ToList(),
+                TotalCount = total,
                 HasNext = hasNext
             };
         }
