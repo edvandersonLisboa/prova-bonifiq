@@ -7,6 +7,8 @@ using ProvaPub.Services.Factories.Interfaces;
 using ProvaPub.Services.Interfaces;
 using ProvaPub.Services.Payments;
 using ProvaPub.Shared.Repository.Base;
+using ProvaPub.Shared.SystemDate;
+using ProvaPub.Shared.SystemDate.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,7 @@ builder.Services.AddScoped<IPaymentServiceFactory, PaymentServiceFactory>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IDateTimeProvider, SystemDateTimeProvider>();
 var app = builder.Build();
 
 

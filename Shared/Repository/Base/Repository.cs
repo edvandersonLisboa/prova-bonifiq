@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProvaPub.Repository;
 using ProvaPub.Shared.Entities;
+using ProvaPub.Shared.Repository.Base.Interfaces;
+using System.Linq.Expressions;
 
 namespace ProvaPub.Shared.Repository.Base
 {
@@ -42,6 +44,30 @@ namespace ProvaPub.Shared.Repository.Base
                 throw new Exception(ex.Message);
             }
             
+        }
+
+        public virtual async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            var count = 0;
+                count = await _dbSet
+                    .CountAsync(predicate);
+            return count;
+        }
+
+        public virtual async Task<ICollection<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            
+            ICollection<TEntity> result = await _dbSet.Where(predicate).ToListAsync();
+
+            return result;
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(int id)
+        {
+            TEntity entity = await _dbSet.AsNoTracking()
+                     .SingleOrDefaultAsync(p => p.Id == id);
+       
+            return entity;
         }
     }
 }
