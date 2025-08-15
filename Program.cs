@@ -17,6 +17,8 @@ builder.Services.AddDbContext<TestDbContext>(options =>
 builder.Services.AddScoped<Random>();
 builder.Services.AddScoped<TestDbContext>();
 builder.Services.AddScoped<RandomService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CustomerService>();
 var app = builder.Build();
 
 

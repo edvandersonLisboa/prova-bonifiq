@@ -1,4 +1,6 @@
-﻿using ProvaPub.Models;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
+using ProvaPub.Models;
 using ProvaPub.Repository;
 
 namespace ProvaPub.Services
@@ -12,10 +14,24 @@ namespace ProvaPub.Services
 			_ctx = ctx;
 		}
 
-		public ProductList  ListProducts(int page)
+		public async Task<ProductList>  ListProducts(int page)
 		{
-			return new ProductList() {  HasNext=false, TotalCount =10, Products = _ctx.Products.ToList() };
-		}
+			var take = 2;
+			var products =_ctx.Products;
+			var countTotal =products.Count();
+            
+            var result = await _ctx.Products
+				.Skip(page * take)
+				.Take(take).ToListAsync();
+
+            bool hasNext = page * take < countTotal;
+            return new ProductList()
+            {
+                Products = result.ToList(),
+                TotalCount = countTotal,
+                HasNext = hasNext
+            };
+        }
 
 	}
 }

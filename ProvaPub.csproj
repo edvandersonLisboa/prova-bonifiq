@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Shared\Repository\Base\Interfaces\" />
   </ItemGroup>
 
 </Project>
