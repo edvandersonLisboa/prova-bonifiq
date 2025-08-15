@@ -33,7 +33,7 @@ builder.Services.AddScoped<IPaymentService,CreditCard>();
 builder.Services.AddScoped<IPaymentService, Pix>();
 builder.Services.AddScoped<IPaymentService, PayPal>();
 
-
+builder.Services.AddScoped<IRandomNumberRepository, RandomNumberRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentServiceFactory, PaymentServiceFactory>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();

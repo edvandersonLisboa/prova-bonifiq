@@ -16,5 +16,9 @@ namespace ProvaPub.Shared.Repository.Base.Interfaces
 
         Task<TEntity> GetByIdAsync(int id);
 
+        Task<int> CountAsync();
+
+        Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
     }
 }

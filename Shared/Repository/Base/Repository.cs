@@ -54,6 +54,14 @@ namespace ProvaPub.Shared.Repository.Base
             return count;
         }
 
+
+        public virtual async Task<int> CountAsync()
+        {
+            var count = 0;
+            count = await _dbSet
+                .CountAsync();
+            return count;
+        }
         public virtual async Task<ICollection<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
             
@@ -68,6 +76,15 @@ namespace ProvaPub.Shared.Repository.Base
                      .SingleOrDefaultAsync(p => p.Id == id);
        
             return entity;
+        }
+
+        public virtual async Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            var result = await _dbSet
+                .Where(predicate)
+                .FirstOrDefaultAsync();
+
+            return result;
         }
     }
 }
